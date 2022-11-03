@@ -1,20 +1,67 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+  <ion-header [translucent]="true">
     <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+
+      <div style="margin: auto;">
+
+          <ion-buttons slot="start">
+                <ion-searchbar placeholder="pesquisar..."
+                                [(ngModel)]="queryText"
+                                showCancelButton="focus"
+                                animated>
+                </ion-searchbar>
+             <ion-button (click)="searchByMale()">
+                  M
+              </ion-button>
+              <ion-button (click)="searchByFeMale()">
+                  F
+              </ion-button>
+              <ion-button (click)="refreshList()">
+                <ion-icon slot="icon-only" name="reload-outline"></ion-icon>
+              </ion-button>
+          </ion-buttons>
+        </div>
     </ion-toolbar>
+
   </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+<ion-content>
+
+  <ion-refresher
+    slot="fixed"
+    (ionRefresh)="refreshingData($event)"
+    pullFactor="0.5"
+    pullMin="100"
+    pullMax="200"
+  >
+    <ion-refresher-content
+    pullingIcon="chevron-down-circle-outline"
+    pullingText="Puxe para atualizar"
+    refreshingSpinner="circles"
+    refreshingText="Atualizando...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-grid>
+    <ion-row justify-content-center>
+      <ion-col col-12 col-sm-9 col-md-7 col-lg-5>
+
+        <div *ngIf="user">
+
+          <user-card
+            *ngFor="let user of user | filter:queryText"
+            [user]="user"
+          ></user-card>
+
+         <ion-infinite-scroll threshold="25%" (ionInfinite)="getMoreUsers($event)">
+           <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Carregando...">
+           </ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+        </div>
+        <div *ngIf="user.length == 0">
+          <small class="text-center"><b>Os usuários aparecerão aqui</b></small>
+        </div>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

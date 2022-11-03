@@ -1,0 +1,14 @@
+<ion-card (click)="openUser()">
+    <ion-item>
+          <ion-avatar slot="start">
+            <img class="thumbNail" onError="this.src='./assets/imgs/user.png';"
+            (load)="imgLoaded = true"
+            [hidden]="!imgLoaded" src="{{user.picture?.large}}"/>  <ion-spinner color="primary" *ngIf="!imgLoaded"></ion-spinner>
+          </ion-avatar>
+          <ion-label>
+            <h2>{{user.name?.first}} <span>{{user.name?.last}} </span></h2>
+            <p>{{user.email}}</p>
+          </ion-label>
+    </ion-item>
+</ion-card>
+
